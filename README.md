@@ -10,9 +10,9 @@ $$E_n = -\frac{\mu e^4 Z^2}{8 \varepsilon_0^2 h^2 n^2}, \qquad r_n = \frac{\vare
 ```bash
 pip install atomo-bohr          # sólo la lógica (depende de numpy)
 pip install "atomo-bohr[gui]"   # + matplotlib y streamlit para interfaces gráficas
-
+```
 ## Uso
-
+```bash
 from atomo_bohr import BohrAtom, BohrMasaReducida, BohrRelativista
 
 atomo = BohrAtom(Z=1, estrategia="masa_infinita")
@@ -23,9 +23,9 @@ res = atomo.transicion_electronica(n_inicial=3, n_final=2)
 print(res.delta_energia_ev, res.frecuencia_hz, res.longitud_onda_nm)
 
 atomo.estrategia = BohrMasaReducida()                 # cambio dinámico de estrategia
+```
 
-
-Modelos disponibles (FabricaModelos.disponibles()):
+## Modelos disponibles (FabricaModelos.disponibles()):
 
 Estrategia,Tipo,Descripción Física
 BohrMasaInfinita,Analítica clásica,Núcleo estático de masa infinita (μ=me​)
@@ -44,17 +44,22 @@ GUI.py — interfaz dual que ejecuta simultáneamente Tkinter + Streamlit usando
 ## Desarrollo
 
 Una sola vez, desde la carpeta raíz del proyecto:
+``` bash
 python -m venv .venv
 source .venv/bin/activate             # En Windows PowerShell: .\.venv\Scripts\Activate.ps1
 python -m pip install -e ".[gui,dev]"
+```
 
 Para ejecutar los ejemplos o lanzar simultáneamente la ventana de Tkinter y la aplicación web en Streamlit:
-
+```bash
 python ejemplo_consola.py
 python GUI.py
+```
 
 ## Pruebas
+```bash
 pytest -v
+```
 
 ## Autor y Licencia
 Autor: Luder Espitia Guzmán
