@@ -1,0 +1,54 @@
+name: Deploy Sphinx Documentation to GitHub Pages
+
+on:
+  push:
+    branches: ["main"] # Se ejecutará cada vez que haya un push a la rama main
+  workflow_dispatch:   # Permite ejecutarlo manualmente desde GitHub
+
+# Otorga permisos para que el bot de GitHub pueda publicar la página
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias del proyecto y Sphinx
+        run: |
+          python -m pip install --upgrade pip
+          # Instalamos el paquete para que Sphinx pueda leer el código fuente
+          pip install .[dev,gui]
+
+      - name: Construir la documentación HTML con Sphinx
+        run: |
+          sphinx-build -b html docs docs/_build/html
+
+      - name: Subir artefacto de GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Desplegar a GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
